@@ -2,7 +2,7 @@ import React from "react";
 import { Box } from "lucide-react";
 import { useOutletContext } from "react-router";
 const NavBar = () => {
-  const { isSignedIn, userName, signIn, signOut } = useOutletContext();
+  const { isSignedIn, userName, signIn, signOut } = useOutletContext<AuthContext>();
   const handleAuthClick = async () => {
     if (isSignedIn) {
       try {
