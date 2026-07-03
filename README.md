@@ -1,87 +1,84 @@
-# Welcome to React Router!
+# Roomify
 
-A modern, production-ready template for building full-stack React applications using React Router.
+An AI-first design tool where you upload a 2D floor plan and get back a photorealistic, top-down 3D architectural render — with a before/after compare slider, project history, and export.
+Built with React Router (SSR), Puter.js for auth and storage, and Puter AI (Gemini image model) for rendering.
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/remix-run/react-router-templates/tree/main/default)
+---
 
-## Features
+## Demo Link
 
-- 🚀 Server-side rendering
-- ⚡️ Hot Module Replacement (HMR)
-- 📦 Asset bundling and optimization
-- 🔄 Data loading and mutations
-- 🔒 TypeScript by default
-- 🎉 TailwindCSS for styling
-- 📖 [React Router docs](https://reactrouter.com/)
+[Live Demo](https://puter.com/app/roomify-22)
 
-## Getting Started
+---
 
-### Installation
+## Login
 
-Install the dependencies:
+Roomify uses [Puter](https://puter.com) for authentication — click **Login** in the navbar and sign in (or create a free account) through the Puter popup. There is no separate username/password for this app.
 
-```bash
+---
+
+## Quick Start
+
+```
+git clone https://github.com/NagaaSaketh/Roomify.git
+cd Roomify
 npm install
+npm run dev
 ```
 
-### Development
+Create a `.env.local` with your Puter worker URL:
 
-Start the development server with HMR:
-
-```bash
-npm run dev
+```
+VITE_PUTER_WORKER_URL=https://<your-worker>.puter.site
 ```
 
 Your application will be available at `http://localhost:5173`.
 
-## Building for Production
+## Technologies
+- React 19 + React Router 7 (SSR framework mode)
+- Vite
+- Tailwind CSS
+- Puter.js (auth, key-value storage, file hosting, AI)
+- Puter Workers (serverless backend, see `lib/puter.worker.js`)
+- Gemini image model (`gemini-2.5-flash-image-preview`) via `puter.ai.txt2img`
+- Docker for deployment
 
-Create a production build:
+## Features
+**Home**
+- Upload a floor plan image (JPG/PNG, up to 10MB)
+- Browse your project history with thumbnails and timestamps
 
-```bash
-npm run build
-```
+**Visualizer**
+- Automatically generates a photorealistic top-down 3D render from the uploaded floor plan
+- Before/after comparison slider (drag to reveal)
+- Re-render and export the generated image as PNG
 
-## Deployment
+**Authentication**
+- Sign in / out via Puter's hosted auth (no custom password storage)
+- Projects are scoped to the signed-in Puter user
 
-### Docker Deployment
+**Storage**
+- Source and rendered images are uploaded to Puter hosting
+- Project metadata is persisted in Puter's key-value store via a Puter Worker
 
-To build and run using Docker:
+## API Reference
 
-```bash
-docker build -t my-app .
+These endpoints are served by the Puter Worker (`lib/puter.worker.js`), invoked from the client via `puter.workers.exec`.
 
-# Run the container
-docker run -p 3000:3000 my-app
-```
+### **POST /api/projects/save**
+Create or update a project for the authenticated user<br>
+Sample Response:<br>
+```{ saved: true, id, project: { id, name, sourceImage, renderedImage, timestamp, ... } }```
 
-The containerized application can be deployed to any platform that supports Docker, including:
+### **GET /api/projects/list**
+List all projects belonging to the authenticated user<br>
+Sample Response:<br>
+```{ projects: [{ id, name, sourceImage, renderedImage, timestamp, ... }, …] }```
 
-- AWS ECS
-- Google Cloud Run
-- Azure Container Apps
-- Digital Ocean App Platform
-- Fly.io
-- Railway
+### **GET /api/projects/get?id=:id**
+Get a single project by id<br>
+Sample Response:<br>
+```{ project: { id, name, sourceImage, renderedImage, timestamp, ... } }```
 
-### DIY Deployment
-
-If you're familiar with deploying Node applications, the built-in app server is production-ready.
-
-Make sure to deploy the output of `npm run build`
-
-```
-├── package.json
-├── package-lock.json (or pnpm-lock.yaml, or bun.lockb)
-├── build/
-│   ├── client/    # Static assets
-│   └── server/    # Server-side code
-```
-
-## Styling
-
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever CSS framework you prefer.
-
----
-
-Built with ❤️ using React Router.
+## Contact
+For bugs or feature requests, please reach out to vadlamanisaketh25@gmail.com
